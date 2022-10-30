@@ -1,13 +1,13 @@
-int potPin = A2;
-int lightSense = A1;
+int potPin = A2; //changes light sensitivity
+int lightSense = A1; //photoresistor 
 int X;
-int ledRED1 = 11;
-int ledgreen1 = 10;
+int ledBLUE1 = 11; // green-blue LED
+int ledGREEN1 = 10;
 
-float ledRED2 = 9;   // select the pin for the LED
+float ledRED2 = 9; //red-yellow LED
 int ledGREEN2 = 6;
 
-int ledBLUE3 = 5;
+int ledBLUE3 = 5; //blue-purple LED
 int ledRED3 = 3;
 
 int val = 0;
@@ -17,86 +17,82 @@ void setup() {
   Serial.begin(9600);
     pinMode(lightSense, INPUT);
     pinMode(potPin, INPUT);
-  pinMode(ledRED1, OUTPUT);  // declare the ledPin as an OUTPUT
-  pinMode(ledgreen1, OUTPUT);  // declare the ledPin as an OUTPUT
+  pinMode(ledBLUE1, OUTPUT);  // declare the ledPin as an OUTPUT
+  pinMode(ledGREEN1, OUTPUT);  
 
-  pinMode(ledRED2, OUTPUT);  // declare the ledPin as an OUTPUT
-  pinMode(ledGREEN2, OUTPUT);  // declare the ledPin as an OUTPUT
+  pinMode(ledRED2, OUTPUT);  
+  pinMode(ledGREEN2, OUTPUT); 
 
-  pinMode(ledBLUE3, OUTPUT);  // declare the ledPin as an OUTPUT
-  pinMode(ledRED3, OUTPUT);  // declare the ledPin as an OUTPUT
+  pinMode(ledBLUE3, OUTPUT);  
+  pinMode(ledRED3, OUTPUT); 
 
 }
 
 void loop() {
-  float counter = 1;
-  float counter2 = 1;
   float counter3 = 1;
+  float counter1 = 1;
+  float counter2 = 1;
   float x = random(0, 255);
   float y = random(0, 255);
+  float z = random(0, 255);
+  float h = random(0, 255);
+  float w = random(0, 255);
+  float k = random(0, 10);
   float a;
   float b;
   float c;
   float d;
   float e;
   float f;
-  float kill;
-  float jack;
-  float mom;
-  float dad;
-  float kek;
-  float pog;
+  float BLUE1val;
+  float GREEN1val;
+  float RED3val;
+  float BLUE3val;
+  float RED2val;
+  float GREEN2val;
   val = analogRead(potPin);
   val2 = analogRead(lightSense);
 
 
-  if (val2>val){
+  if (val2>val){ //if photoresistor receives more light than pot specified 
     for (int fadeValue2 = 85 ; fadeValue2 >= 0; fadeValue2 --) {
 
-      a = x / 255;
-      b = y / 255;
+      a = x / 255; //determines intensity of blue 
+      b = y / 255; //determines intensity of green 
 
-      kill = x - (a * counter2);
-      jack =  y - (b * counter2)  ;
-      analogWrite(ledRED1, kill);
-      analogWrite(ledgreen1, jack);
-      counter2++;
-      delay(10);
+      BLUE1val = x - (a * counter1); //blue and green value grow smaller and smaller until 0
+      GREEN1val =  y - (b * counter1);
+      analogWrite(ledBLUE1, BLUE1val);
+      analogWrite(ledGREEN1, GREEN1val);
+      counter1++;
+      delay(10); 
 
     }
-    counter = 1;
-    float z = random(0, 255);
-    float h = random(0, 255);
+//blue-green led first cycle
+//after 85 cycles, move on to next fade
 
-
-  val = analogRead(potPin);
-  val2 = analogRead(lightSense);
-
-
-  if (val2>val){
+  if (val2>val){ //checking for photoresistor
     for (int fadeValue2 = 85; fadeValue2 >= 0; fadeValue2 --) {
 
-      c = z / 255;
-      d = h / 255;
+      c = z / 255; //determines intensity of red 
+      d = h / 255; //determines intensity of blue 
 
-      mom = z - (c * counter);
-      dad =  h - (d * counter)  ;
-      analogWrite(ledRED3, mom);
-      analogWrite(ledBLUE3, dad);
-      counter++;
-      if (counter2 < 255) {
+      RED3val = z - (c * counter3);
+      BLUE3val =  h - (d * counter3);
+      analogWrite(ledRED3, RED3val);
+      analogWrite(ledBLUE3, BLUE3val);
+      counter3++; //red-blue led first cycle
+      if (counter1 < 255) {
         a = x / 255;
         b = y / 255;
-        kill = x - (a * counter2);
-        jack =  y - (b * counter2)  ;
-        analogWrite(ledRED1, kill);
-        analogWrite(ledgreen1, jack);
-        counter2++;
+        BLUE1val = x - (a * counter1);
+        GREEN1val =  y - (b * counter1);
+        analogWrite(ledBLUE1, BLUE1val);
+        analogWrite(ledGREEN1, GREEN1val);
+        counter1++; //blue-green led second cycle
       }
       delay(10);
     }
-    float honestly = random(0, 255);
-    float idk = random(0, 10);
   val = analogRead(potPin);
   val2 = analogRead(lightSense);
 
@@ -104,35 +100,35 @@ void loop() {
   if (val2>val){
     for (int fadeValue3 = 85; fadeValue3 >= 0; fadeValue3 --) {
 
-      e = honestly / 255;
-      f = idk*10 / 255;
+      e = w / 255;
+      f = w*10 / 255; //green is adjusted to make it more prominent
 
-      kek = honestly - (e * counter3);
-      pog =  idk*10 - (f * counter3)  ;
+      RED2val = w - (e * counter2);
+      GREEN2val =  w*10 - (f * counter2)  ;
 
-      analogWrite(ledRED2, kek);
-      analogWrite(ledGREEN2, pog);
-      counter3++;
+      analogWrite(ledRED2, RED2val);
+      analogWrite(ledGREEN2, GREEN2val);
+      counter2++; //red-green led first cycle
 
-      if (counter < 255) {
+      if (counter3 < 255) {
         c = z / 255;
         d = h / 255;
 
-        mom = z - (c * counter);
-        dad =  h - (d * counter)  ;
-        analogWrite(ledRED3, mom);
-        analogWrite(ledBLUE3, dad);
-        counter++;
+        RED3val = z - (c * counter3);
+        BLUE3val =  h - (d * counter3)  ;
+        analogWrite(ledRED3, RED3val);
+        analogWrite(ledBLUE3, BLUE3val);
+        counter3++; //red-blue led second cycle
       }
 
-      if (counter2 < 255) {
+      if (counter1 < 255) {
         a = x / 255;
         b = y / 255;
-        kill = x - (a * counter2);
-        jack =  y - (b * counter2)  ;
-        analogWrite(ledRED1, kill);
-        analogWrite(ledgreen1, jack);
-        counter2++;
+        BLUE1val = x - (a * counter1);
+        GREEN1val =  y - (b * counter1)  ;
+        analogWrite(ledBLUE1, BLUE1val);
+        analogWrite(ledGREEN1, GREEN1val);
+        counter1++; //blue-green led last cycle
       }
       delay(10);
     }
@@ -143,27 +139,26 @@ void loop() {
 
   if (val2>val){
     for (int fadeValue4 = 170; fadeValue4 >= 0; fadeValue4 --) {
-if (counter3 < 255) {
-      e = honestly / 255;
-      f = idk*10 / 255;
+      if (counter2 < 255) {
+      e = w / 255;
+      f = w*10 / 255;
 
-      kek = honestly - (e * counter3);
-      pog =  idk*10 - (f * counter3)  ;
+      RED2val = w - (e * counter2);
+      GREEN2val =  w*10 - (f * counter2)  ;
 
-      analogWrite(ledRED2, kek);
-      analogWrite(ledGREEN2, pog);
-      counter3++;
- Serial.println(counter3);
+      analogWrite(ledRED2, RED2val);
+      analogWrite(ledGREEN2, GREEN2val);
+      counter2++; //red-green led second/final cycle
 }
-      if (counter < 255) {
+      if (counter3 < 255) {
         c = z / 255;
         d = h / 255;
 
-        mom = z - (c * counter);
-        dad =  h - (d * counter)  ;
-        analogWrite(ledRED3, mom);
-        analogWrite(ledBLUE3, dad);
-        counter++;
+        RED3val = z - (c * counter3);
+        BLUE3val =  h - (d * counter3)  ;
+        analogWrite(ledRED3, RED3val);
+        analogWrite(ledBLUE3, BLUE3val);
+        counter3++; //red-blue led final cycle
       }
       delay(10);
     }
@@ -173,8 +168,8 @@ if (counter3 < 255) {
     analogWrite(ledGREEN2, 0);
     analogWrite(ledRED3, 0);
     analogWrite(ledBLUE3, 0);
-    analogWrite(ledRED1, 0);
-    analogWrite(ledgreen1, 0);
+    analogWrite(ledBLUE1, 0);
+    analogWrite(ledGREEN1, 0);
     delay(10);
   }
     
@@ -184,8 +179,8 @@ else {
     analogWrite(ledGREEN2, 0);
     analogWrite(ledRED3, 0);
     analogWrite(ledBLUE3, 0);
-    analogWrite(ledRED1, 0);
-    analogWrite(ledgreen1, 0);
+    analogWrite(ledBLUE1, 0);
+    analogWrite(ledGREEN1, 0);
     delay(10);
   }
   }
@@ -194,8 +189,8 @@ else {
     analogWrite(ledGREEN2, 0);
     analogWrite(ledRED3, 0);
     analogWrite(ledBLUE3, 0);
-    analogWrite(ledRED1, 0);
-    analogWrite(ledgreen1, 0);
+    analogWrite(ledBLUE1, 0);
+    analogWrite(ledGREEN1, 0);
     delay(10);
   }
 }
@@ -204,8 +199,8 @@ else {
     analogWrite(ledGREEN2, 0);
     analogWrite(ledRED3, 0);
     analogWrite(ledBLUE3, 0);
-    analogWrite(ledRED1, 0);
-    analogWrite(ledgreen1, 0);
+    analogWrite(ledBLUE1, 0);
+    analogWrite(ledGREEN1, 0);
     delay(10);
   }
 
